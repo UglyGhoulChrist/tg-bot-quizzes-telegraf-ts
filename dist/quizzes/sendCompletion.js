@@ -13,14 +13,17 @@ exports.sendCompletion = void 0;
 const userStates_1 = require("../state/userStates");
 const appendQuizResult_1 = require("../loggers/appendQuizResult");
 const appendErr_1 = require("../loggers/appendErr");
-function sendCompletion(bot, chatId, userId, userState, userFirstName) {
+function sendCompletion(bot, userId) {
     return __awaiter(this, void 0, void 0, function* () {
+        const userState = (0, userStates_1.getUserState)(userId);
+        const chatId = userState.chatId;
+        const firstName = userState.firstName;
         try {
             yield bot.telegram.sendMessage(chatId, `Ура! Ты прошёл всю викторину и ответил на ${userState.lengthQuiz} вопросов!
 Твой результат: ${userState.correctAnswers} правильных ответов. Ты молодец!
 Хочешь улучшить свой результат? Нажми /start и попробуй снова! 🏆`);
             const quizResult = {
-                name: userFirstName,
+                name: firstName,
                 userId,
                 category: userState.categoryQuiz,
                 lengthQuiz: userState.lengthQuiz,

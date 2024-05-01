@@ -22,7 +22,7 @@ function handleQuizStart(bot, ctx) {
         }
         const userId = ctx.from.id;
         const chatId = ctx.chat.id;
-        const userFirstName = ctx.from.first_name;
+        const firstName = ctx.from.first_name;
         if ((0, userStates_1.getUserState)(userId)) {
             try {
                 yield ctx.reply(constants_1.messageNotFinish);
@@ -34,13 +34,14 @@ function handleQuizStart(bot, ctx) {
         }
         const categoryQuiz = ctx.message.text.slice(1);
         (0, userStates_1.setUserState)(userId, {
+            firstName,
             categoryQuiz,
             lengthQuiz: data_1.data[categoryQuiz].listQuestions.length,
             currentQuestion: 0,
             correctAnswers: 0,
             chatId,
         });
-        yield (0, sendQuizQuestion_1.sendQuiz)(bot, userId, userFirstName);
+        yield (0, sendQuizQuestion_1.sendQuiz)(bot, userId);
     });
 }
 exports.handleQuizStart = handleQuizStart;

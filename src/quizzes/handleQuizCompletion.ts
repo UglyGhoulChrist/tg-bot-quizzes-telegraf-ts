@@ -4,15 +4,16 @@ import { sendCompletion } from "./sendCompletion";
 import { appendQuizResult } from "../loggers/appendQuizResult";
 
 // Функция для обработки завершения викторины
-export async function handleQuizCompletion(bot: Telegraf<Context>, userId: number, userFirstName: string) {
+export async function handleQuizCompletion(bot: Telegraf<Context>, userId: number) {
     const userState = getUserState(userId);
+    const firstName: string = userState.firstName
     if (userState.currentQuestion >= userState.lengthQuiz) {
-        const chatId = userState.chatId;
-        await sendCompletion(bot, chatId, userId, userState, userFirstName);
+
+        await sendCompletion(bot, userId);
 
         // Запись результатов викторины
         const quizResult = {
-            name: userFirstName,
+            name: firstName,
             userId,
             category: userState.categoryQuiz,
             lengthQuiz: userState.lengthQuiz,

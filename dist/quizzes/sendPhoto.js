@@ -15,9 +15,10 @@ const node_path_1 = require("node:path");
 const delay_1 = require("../utils/delay");
 const userStates_1 = require("../state/userStates");
 const appendErr_1 = require("../loggers/appendErr");
-function sendPhoto(bot, quiz, chatId, userId) {
+function sendPhoto(bot, quiz, userId) {
     return __awaiter(this, void 0, void 0, function* () {
         const userState = (0, userStates_1.getUserState)(userId);
+        const chatId = userState.chatId;
         try {
             const photoPath = (0, node_path_1.join)(__dirname, '..', 'images', userState.categoryQuiz, quiz.image);
             const photo = yield node_fs_1.promises.readFile(photoPath);

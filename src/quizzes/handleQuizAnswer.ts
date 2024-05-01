@@ -5,6 +5,7 @@ import { IUserState } from "../state/interface.userState"
 import { getUserState, setUserState } from "../state/userStates"
 import { delay } from "../utils/delay"
 import { sendQuiz } from './sendQuizQuestion';
+import { IQuiz } from '../data/interface.quiz';
 
 export async function handleQuizAnswer(bot: Telegraf<Context>, ctx: Context<Update.PollAnswerUpdate>) {
 
@@ -13,12 +14,12 @@ export async function handleQuizAnswer(bot: Telegraf<Context>, ctx: Context<Upda
     // Если информация о пользователе отсутствует, выходим из функции
     if (!answer.user) return
 
-    const userId = answer.user.id;
-    const userState: IUserState | undefined = getUserState(userId);
+    const userId: number = answer.user.id;
+    const userState: IUserState = getUserState(userId);
     // Если состояние пользователя не найдено, выходим из функции
     if (!userId || !userState) return;
 
-    const quiz = data[userState.categoryQuiz].listQuestions[userState.currentQuestion];
+    const quiz: IQuiz = data[userState.categoryQuiz].listQuestions[userState.currentQuestion];
 
     // Проверяем, правильный ли ответ
     if (answer.option_ids?.[0] === quiz.correct) {
@@ -33,5 +34,5 @@ export async function handleQuizAnswer(bot: Telegraf<Context>, ctx: Context<Upda
     // Задержка в 1 секунду
     await delay(1000);
 
-    await sendQuiz(bot, userId, ctx.from.first_name);
+    await sendQuiz(bot, userId);
 }

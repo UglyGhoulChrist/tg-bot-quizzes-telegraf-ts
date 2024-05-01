@@ -13,7 +13,7 @@ export async function handleQuizStart(bot: Telegraf<Context>, ctx: Context) {
 
     const userId: number = ctx.from.id;
     const chatId: number = ctx.chat.id;
-    const userFirstName: string = ctx.from.first_name;
+    const firstName: string = ctx.from.first_name;
 
     // Проверка начата ли викторина
     if (getUserState(userId)) {
@@ -30,6 +30,7 @@ export async function handleQuizStart(bot: Telegraf<Context>, ctx: Context) {
     const categoryQuiz: string = ctx.message.text.slice(1);
 
     setUserState(userId, {
+        firstName,
         categoryQuiz,
         lengthQuiz: data[categoryQuiz].listQuestions.length,
         currentQuestion: 0,
@@ -37,5 +38,5 @@ export async function handleQuizStart(bot: Telegraf<Context>, ctx: Context) {
         chatId,
     });
 
-    await sendQuiz(bot, userId, userFirstName);
+    await sendQuiz(bot, userId);
 }

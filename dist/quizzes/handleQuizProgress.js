@@ -17,10 +17,9 @@ const sendQuestion_1 = require("./sendQuestion");
 function handleQuizProgress(bot, userId) {
     return __awaiter(this, void 0, void 0, function* () {
         const userState = (0, userStates_1.getUserState)(userId);
-        const chatId = userState.chatId;
         const quiz = data_1.data[userState.categoryQuiz].listQuestions[userState.currentQuestion];
-        yield (0, sendPhoto_1.sendPhoto)(bot, quiz, chatId, userId);
-        yield (0, sendQuestion_1.sendQuestion)(bot, quiz, chatId);
+        yield (0, sendPhoto_1.sendPhoto)(bot, quiz, userId);
+        yield (0, sendQuestion_1.sendQuestion)(bot, quiz, userId);
     });
 }
 exports.handleQuizProgress = handleQuizProgress;

@@ -13,14 +13,14 @@ exports.handleQuizCompletion = void 0;
 const userStates_1 = require("../state/userStates");
 const sendCompletion_1 = require("./sendCompletion");
 const appendQuizResult_1 = require("../loggers/appendQuizResult");
-function handleQuizCompletion(bot, userId, userFirstName) {
+function handleQuizCompletion(bot, userId) {
     return __awaiter(this, void 0, void 0, function* () {
         const userState = (0, userStates_1.getUserState)(userId);
+        const firstName = userState.firstName;
         if (userState.currentQuestion >= userState.lengthQuiz) {
-            const chatId = userState.chatId;
-            yield (0, sendCompletion_1.sendCompletion)(bot, chatId, userId, userState, userFirstName);
+            yield (0, sendCompletion_1.sendCompletion)(bot, userId);
             const quizResult = {
-                name: userFirstName,
+                name: firstName,
                 userId,
                 category: userState.categoryQuiz,
                 lengthQuiz: userState.lengthQuiz,

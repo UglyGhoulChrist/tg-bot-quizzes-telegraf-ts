@@ -7,8 +7,9 @@ import { getUserState } from '../state/userStates';
 import { IUserState } from "../state/interface.userState";
 import { appendErr } from "../loggers/appendErr";
 
-export async function sendPhoto(bot: Telegraf<Context>, quiz: IQuiz, chatId: number, userId: number) {
+export async function sendPhoto(bot: Telegraf<Context>, quiz: IQuiz, userId: number) {
     const userState: IUserState = getUserState(userId)
+    const chatId: number = userState.chatId
 
     try {
         const photoPath: string = join(__dirname, '..', 'images', userState.categoryQuiz, quiz.image)

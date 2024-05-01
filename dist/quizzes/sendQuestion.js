@@ -11,8 +11,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendQuestion = void 0;
 const appendErr_1 = require("../loggers/appendErr");
-function sendQuestion(bot, quiz, chatId) {
+const userStates_1 = require("../state/userStates");
+function sendQuestion(bot, quiz, userId) {
     return __awaiter(this, void 0, void 0, function* () {
+        const userState = (0, userStates_1.getUserState)(userId);
+        const chatId = userState.chatId;
         try {
             yield bot.telegram.sendQuiz(chatId, quiz.question, quiz.options, { is_anonymous: false, correct_option_id: quiz.correct });
         }

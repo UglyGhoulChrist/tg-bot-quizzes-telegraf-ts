@@ -17,20 +17,19 @@ const botStates_1 = require("../state/botStates");
 const sendPhoto_1 = require("./sendPhoto");
 const sendQuestion_1 = require("./sendQuestion");
 const sendCompletion_1 = require("./sendCompletion");
-function sendQuiz(bot, userId, userFirstName) {
+function sendQuiz(bot, userId) {
     return __awaiter(this, void 0, void 0, function* () {
         if (!(0, botStates_1.getBotState)()) {
             (0, appendLog_1.appendLog)('Бот не запущен, отправка викторины невозможна.');
             return;
         }
         const userState = (0, userStates_1.getUserState)(userId);
-        const chatId = userState.chatId;
         if (userState.currentQuestion >= userState.lengthQuiz) {
-            (0, sendCompletion_1.sendCompletion)(bot, chatId, userId, userState, userFirstName);
+            (0, sendCompletion_1.sendCompletion)(bot, userId);
         }
         const quiz = data_1.data[userState.categoryQuiz].listQuestions[userState.currentQuestion];
-        yield (0, sendPhoto_1.sendPhoto)(bot, quiz, chatId, userId);
-        yield (0, sendQuestion_1.sendQuestion)(bot, quiz, chatId);
+        yield (0, sendPhoto_1.sendPhoto)(bot, quiz, userId);
+        yield (0, sendQuestion_1.sendQuestion)(bot, quiz, userId);
     });
 }
 exports.sendQuiz = sendQuiz;

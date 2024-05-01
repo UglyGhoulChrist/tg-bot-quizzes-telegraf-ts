@@ -9,7 +9,7 @@ import { sendPhoto } from './sendPhoto';
 import { sendQuestion } from './sendQuestion';
 import { sendCompletion } from './sendCompletion';
 
-export async function sendQuiz(bot: Telegraf<Context>, userId: number, userFirstName: string): Promise<void> {
+export async function sendQuiz(bot: Telegraf<Context>, userId: number): Promise<void> {
 
     // Проверяем, запущен ли бот перед отправкой викторины
     if (!getBotState()) {
@@ -18,18 +18,17 @@ export async function sendQuiz(bot: Telegraf<Context>, userId: number, userFirst
     }
 
     const userState: IUserState = getUserState(userId)
-    const chatId: number = userState.chatId
 
     if (userState.currentQuestion >= userState.lengthQuiz) {
         // Отправка сообщения окончания викторины
-        sendCompletion(bot, chatId, userId, userState, userFirstName)
+        sendCompletion(bot, userId)
     }
 
     const quiz: IQuiz = data[userState.categoryQuiz].listQuestions[userState.currentQuestion]
 
     // Отправка сообщения с картинкой из вопроса
-    await sendPhoto(bot, quiz, chatId, userId)
+    await sendPhoto(bot, quiz, userId)
 
     // Отправка сообщения с вопросом викторины и вариантами ответа
-    await sendQuestion(bot, quiz, chatId)
+    await sendQuestion(bot, quiz, userId)
 }

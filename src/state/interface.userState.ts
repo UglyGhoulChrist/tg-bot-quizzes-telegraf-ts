@@ -1,5 +1,6 @@
 // Интерфейс для хранения состояния пользователя
 export interface IUserState {
+    firstName: string // Имя пользователя
     categoryQuiz: string // Категория викторины
     lengthQuiz: number // Количество вопросов в викторине
     currentQuestion: number // Текущий вопрос в викторине

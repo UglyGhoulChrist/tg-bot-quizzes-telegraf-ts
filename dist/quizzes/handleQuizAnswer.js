@@ -31,7 +31,7 @@ function handleQuizAnswer(bot, ctx) {
         userState.currentQuestion += 1;
         (0, userStates_1.setUserState)(userId, userState);
         yield (0, delay_1.delay)(1000);
-        yield (0, sendQuizQuestion_1.sendQuiz)(bot, userId, ctx.from.first_name);
+        yield (0, sendQuizQuestion_1.sendQuiz)(bot, userId);
     });
 }
 exports.handleQuizAnswer = handleQuizAnswer;
