@@ -1,42 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.dataSpaces1019 = void 0;
-exports.dataSpaces1019 = [
-    {
-        id: 10,
-        question: "Какая планета известна своими мощными ураганами?",
-        options: ["Венера", "Юпитер", "Нептун"],
-        correct: 1,
-        image: "10.webp",
-    },
-    {
-        id: 11,
-        question: "Как называется самый яркий объект на ночном небе после Луны?",
-        options: ["Марс", "Венера", "Сириус"],
-        correct: 1,
-        image: "11.webp",
-    },
-    {
-        id: 12,
-        question: "Как называется процесс, при котором звезды производят энергию?",
-        options: ["Фотосинтез", "Термоядерный синтез", "Горение"],
-        correct: 1,
-        image: "12.webp",
-    },
-    {
-        id: 13,
-        question: "Как называется самая дальняя планета от Солнца в нашей солнечной системе?",
-        options: ["Уран", "Нептун", "Плутон"],
-        correct: 1,
-        image: "13.webp",
-    },
-    {
-        id: 14,
-        question: "Как называется явление, когда Луна полностью закрывает Солнце?",
-        options: ["Солнечное затмение", "Лунное затмение", "Кольцо огня"],
-        correct: 0,
-        image: "14.webp",
-    },
+exports.dataSpaces1519 = void 0;
+exports.dataSpaces1519 = [
     {
         id: 15,
         question: "Как называется ближайшая к нам галактика?",
