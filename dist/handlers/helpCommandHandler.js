@@ -8,19 +8,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.appendQuizResult = void 0;
-const node_path_1 = __importDefault(require("node:path"));
-const loggers_1 = require("./loggers");
-const QUIZ_RESULTS_FILE_PATH = node_path_1.default.join('logFiles', 'quizResults.log');
-function appendQuizResult(quizResult) {
+exports.helpCommandHandler = void 0;
+const constants_1 = require("../constants");
+const appendError_1 = require("../loggers/appendError");
+function helpCommandHandler(ctx) {
     return __awaiter(this, void 0, void 0, function* () {
-        const timestamp = new Date().toISOString();
-        const resultEntry = `${timestamp}: ${JSON.stringify(quizResult)}\n`;
-        yield (0, loggers_1.loggers)(QUIZ_RESULTS_FILE_PATH, resultEntry);
+        try {
+            yield ctx.replyWithHTML(constants_1.messageHelp, { parse_mode: 'HTML' });
+        }
+        catch (error) {
+            (0, appendError_1.appendError)(error);
+        }
     });
 }
-exports.appendQuizResult = appendQuizResult;
+exports.helpCommandHandler = helpCommandHandler;

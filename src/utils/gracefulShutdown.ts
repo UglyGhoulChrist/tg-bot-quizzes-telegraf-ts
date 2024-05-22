@@ -1,7 +1,7 @@
 import { Update } from '@telegraf/types/update'
 import { Context, Telegraf } from 'telegraf'
 import { appendLog } from '../loggers/appendLog'
-import { setBotState } from '../state/botStates'
+import { setBotState } from '../states/botStates'
 
 // Функция для корректной остановки бота
 export async function gracefulShutdown(bot: Telegraf<Context<Update>>, signal: string) {

@@ -3,14 +3,14 @@ import path from 'node:path'
 import { loggers } from './loggers'
 
 // Путь к файлу логов бота
-const LOG_FILE_PATH = path.join('logFiles', 'botLogs.log')
+const LOG_FILE_PATH: string = path.join('logFiles', 'botLogs.log')
 
 // Функция для добавления лога в файл логов
-export async function appendLog(logMessage: string): Promise<void> {
+export async function appendError(error: NodeJS.ErrnoException): Promise<void> {
     // Получаю текущую дату и время в формате ISO
-    const timestamp = new Date().toISOString()
+    const timestamp: string = new Date().toISOString()
     // Формирую запись лога
-    const logEntry = `INFO - ${timestamp}: ${logMessage}\n`
+    const errEntry: string = `ERROR - ${timestamp}: ${error.message}\n`
     // Добавляю запись в файл логов
-    await loggers(LOG_FILE_PATH, logEntry)
+    await loggers(LOG_FILE_PATH, errEntry)
 }

@@ -3,6 +3,7 @@ export interface IQuiz {
     id: number
     question: string
     options: string[]
-    correct: 0 | 1 | 2
+    correct: number
     image: string
+    facts?: string[]
 }

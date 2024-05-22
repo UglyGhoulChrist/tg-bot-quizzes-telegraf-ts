@@ -8,19 +8,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.appendQuizResult = void 0;
-const node_path_1 = __importDefault(require("node:path"));
-const loggers_1 = require("./loggers");
-const QUIZ_RESULTS_FILE_PATH = node_path_1.default.join('logFiles', 'quizResults.log');
-function appendQuizResult(quizResult) {
+exports.quizProgressHandler = void 0;
+const userStates_1 = require("../states/userStates");
+const imageSender_1 = require("../senders/imageSender");
+const questionSender_1 = require("../senders/questionSender");
+function quizProgressHandler(bot, userId) {
     return __awaiter(this, void 0, void 0, function* () {
-        const timestamp = new Date().toISOString();
-        const resultEntry = `${timestamp}: ${JSON.stringify(quizResult)}\n`;
-        yield (0, loggers_1.loggers)(QUIZ_RESULTS_FILE_PATH, resultEntry);
+        const userState = (0, userStates_1.getUserState)(userId);
+        yield (0, imageSender_1.imageSender)(bot, userId);
+        yield (0, questionSender_1.questionSender)(bot, userId);
     });
 }
-exports.appendQuizResult = appendQuizResult;
+exports.quizProgressHandler = quizProgressHandler;

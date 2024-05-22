@@ -8,19 +8,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.appendQuizResult = void 0;
-const node_path_1 = __importDefault(require("node:path"));
-const loggers_1 = require("./loggers");
-const QUIZ_RESULTS_FILE_PATH = node_path_1.default.join('logFiles', 'quizResults.log');
-function appendQuizResult(quizResult) {
+exports.loggers = void 0;
+const node_fs_1 = require("node:fs");
+const fileHelpers_1 = require("./fileHelpers");
+function loggers(filePath, content) {
     return __awaiter(this, void 0, void 0, function* () {
-        const timestamp = new Date().toISOString();
-        const resultEntry = `${timestamp}: ${JSON.stringify(quizResult)}\n`;
-        yield (0, loggers_1.loggers)(QUIZ_RESULTS_FILE_PATH, resultEntry);
+        yield (0, fileHelpers_1.fileHelpers)(filePath);
+        try {
+            yield node_fs_1.promises.appendFile(filePath, content, { encoding: 'utf-8' });
+        }
+        catch (error) {
+            const err = error;
+            console.error(`Не удалось сохранить в файл (${filePath}):`, err.message);
+        }
     });
 }
-exports.appendQuizResult = appendQuizResult;
+exports.loggers = loggers;

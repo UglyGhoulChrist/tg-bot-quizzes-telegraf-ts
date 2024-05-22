@@ -8,19 +8,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.appendQuizResult = void 0;
-const node_path_1 = __importDefault(require("node:path"));
-const loggers_1 = require("./loggers");
-const QUIZ_RESULTS_FILE_PATH = node_path_1.default.join('logFiles', 'quizResults.log');
-function appendQuizResult(quizResult) {
+exports.questionSender = void 0;
+const appendError_1 = require("../loggers/appendError");
+const userStates_1 = require("../states/userStates");
+function questionSender(bot, userId) {
     return __awaiter(this, void 0, void 0, function* () {
-        const timestamp = new Date().toISOString();
-        const resultEntry = `${timestamp}: ${JSON.stringify(quizResult)}\n`;
-        yield (0, loggers_1.loggers)(QUIZ_RESULTS_FILE_PATH, resultEntry);
+        const userState = (0, userStates_1.getUserState)(userId);
+        const { chatId, currentListQuestions, currentIndexQuestion } = userState;
+        const { question, options, correct } = currentListQuestions[currentIndexQuestion];
+        try {
+            yield bot.telegram.sendQuiz(chatId, question, options, { is_anonymous: false, correct_option_id: correct });
+        }
+        catch (error) {
+            (0, appendError_1.appendError)(error);
+        }
     });
 }
-exports.appendQuizResult = appendQuizResult;
+exports.questionSender = questionSender;

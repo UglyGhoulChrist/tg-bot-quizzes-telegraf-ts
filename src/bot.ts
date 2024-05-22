@@ -1,18 +1,18 @@
 import { config } from 'dotenv'
 import { Context, Telegraf } from 'telegraf'
 import { Update } from '@telegraf/types'
-import { commands } from './commands'
+import { commands } from './commands/commands'
 import { data } from './data/data'
 import { appendLog } from './loggers/appendLog'
 import { gracefulShutdown } from './utils/gracefulShutdown'
-import { handleHelpCommand } from './commands/handleHelpCommand'
-import { handleResetCommand } from './quizzes/handleQuizReset'
-import { handleStartCommand } from './commands/handleStartCommand'
-import { handleMessage } from './handlers/handleMessage'
-import { handleQuizAnswer } from './quizzes/handleQuizAnswer'
-import { setBotState } from './state/botStates'
-import { handleQuizStart } from './quizzes/handleQuizStart'
-import { appendErr } from './loggers/appendErr'
+import { helpCommandHandler } from './handlers/helpCommandHandler'
+import { resetCommandHandler } from './handlers/resetCommandHandler'
+import { startCommandHandler } from './handlers/startCommandHandler'
+import { messageHandler } from './handlers/messageHandler'
+import { questionAnswerHandler } from './handlers/questionAnswerHandler'
+import { setBotState } from './states/botStates'
+import { categorySelectionHandler } from './handlers/categorySelectionHandler'
+import { appendError } from './loggers/appendError'
 
 config()
 
@@ -25,25 +25,25 @@ const bot: Telegraf<Context<Update>> = new Telegraf(process.env.BOT_TOKEN as str
 bot.telegram.setMyCommands(commands)
 
 // Обработка команды `help`
-bot.command('help', handleHelpCommand)
+bot.command('help', helpCommandHandler)
 
 // Обработка команды `start`
-bot.command('start', handleStartCommand)
+bot.command('start', startCommandHandler)
 
 // Обработка команды `reset`
-bot.command('reset', handleResetCommand)
+bot.command('reset', resetCommandHandler)
 
 // Создаю регулярное выражение, которое соответствует любой викторине из массива викторин
 const quizesPattern: RegExp = new RegExp(listQuizes.join('|'), 'i');
 
 // Обработка поиска команды запуска викторин
-bot.command(quizesPattern, (ctx) => handleQuizStart(bot, ctx))
+bot.command(quizesPattern, (ctx) => categorySelectionHandler(bot, ctx))
 
 // Обработка выбора ответа на викторину
-bot.on('poll_answer', (ctx) => handleQuizAnswer(bot, ctx));
+bot.on('poll_answer', (ctx) => questionAnswerHandler(bot, ctx));
 
 // Обработка/удаление пользовательских сообщений
-bot.on('message', handleMessage)
+bot.on('message', messageHandler)
 
 // Лог запуска бота
 bot.launch(() => {
@@ -52,7 +52,7 @@ bot.launch(() => {
 })
 
 // Обработчик ошибок бота
-bot.catch((error) => appendErr(error as NodeJS.ErrnoException))
+bot.catch((error) => appendError(error as NodeJS.ErrnoException))
 
 // Обработчики для корректной остановки бота
 process.once('SIGINT', () => gracefulShutdown(bot, 'SIGINT'))

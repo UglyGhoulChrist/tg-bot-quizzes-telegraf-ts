@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.data = void 0;
-const dataAnimals04_1 = require("./dataAnimals04");
+const updateDataAnimals04_1 = require("./updateDataAnimals04");
 const dataAnimals59_1 = require("./dataAnimals59");
 const dataAnimals1014_1 = require("./dataAnimals1014");
 const dataAnimals1519_1 = require("./dataAnimals1519");
@@ -12,7 +12,7 @@ const dataSpaces1519_1 = require("./dataSpaces1519");
 exports.data = {
     animals: {
         description: 'Викторина про животных',
-        listQuestions: [...dataAnimals04_1.dataAnimals04, ...dataAnimals59_1.dataAnimals59, ...dataAnimals1014_1.dataAnimals1014, ...dataAnimals1519_1.dataAnimals1519,],
+        listQuestions: [...updateDataAnimals04_1.updateDataAnimals04, ...dataAnimals59_1.dataAnimals59, ...dataAnimals1014_1.dataAnimals1014, ...dataAnimals1519_1.dataAnimals1519,],
     },
     spaces: {
         description: 'Викторина про космос',

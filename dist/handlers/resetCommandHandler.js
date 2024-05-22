@@ -9,15 +9,27 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.gracefulShutdown = void 0;
+exports.resetCommandHandler = void 0;
+const constants_1 = require("../constants");
 const appendLog_1 = require("../loggers/appendLog");
-const botStates_1 = require("../states/botStates");
-function gracefulShutdown(bot, signal) {
+const userStates_1 = require("../states/userStates");
+const appendError_1 = require("../loggers/appendError");
+function resetCommandHandler(ctx) {
     return __awaiter(this, void 0, void 0, function* () {
-        (0, botStates_1.setBotState)(false);
-        yield bot.stop(signal);
-        yield (0, appendLog_1.appendLog)(`Бот останавливается...${signal}`);
-        process.exit(0);
+        var _a;
+        const userId = (_a = ctx.from) === null || _a === void 0 ? void 0 : _a.id;
+        if (userId) {
+            (0, userStates_1.resetUserState)(userId);
+            try {
+                yield ctx.reply(constants_1.messageReset);
+            }
+            catch (error) {
+                (0, appendError_1.appendError)(error);
+            }
+        }
+        else {
+            (0, appendLog_1.appendLog)('Объект from в контексте не найден.');
+        }
     });
 }
-exports.gracefulShutdown = gracefulShutdown;
+exports.resetCommandHandler = resetCommandHandler;

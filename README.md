@@ -111,7 +111,7 @@ src/
 │   └── ... 
 │ 
 ├── loggers/
-│   ├── appendErr.ts
+│   ├── appendError.ts
 │   ├── appendLog.ts
 │   ├── appendQuizResult.ts
 │   ├── interface.quizRezult.ts
@@ -144,7 +144,7 @@ src/
 ## Log 
 
 - appendLog.ts - логи запуска, остановки бота ... INFO
-- appendErr.ts - логи ошибок отправки сообщений ... ERROR
+- appendError.ts - логи ошибок отправки сообщений ... ERROR
     - appendToFile.ts в файл /logFiles/botLog.ts
 
 - appendQuizResult.ts - сохранение результатов пройденных викторин

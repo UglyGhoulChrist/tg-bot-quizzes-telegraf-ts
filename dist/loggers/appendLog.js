@@ -14,13 +14,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.appendLog = void 0;
 const node_path_1 = __importDefault(require("node:path"));
-const appendToFfile_1 = require("../utils/appendToFfile");
+const loggers_1 = require("./loggers");
 const LOG_FILE_PATH = node_path_1.default.join('logFiles', 'botLogs.log');
 function appendLog(logMessage) {
     return __awaiter(this, void 0, void 0, function* () {
         const timestamp = new Date().toISOString();
         const logEntry = `INFO - ${timestamp}: ${logMessage}\n`;
-        yield (0, appendToFfile_1.appendToFile)(LOG_FILE_PATH, logEntry);
+        yield (0, loggers_1.loggers)(LOG_FILE_PATH, logEntry);
     });
 }
 exports.appendLog = appendLog;
