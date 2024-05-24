@@ -93,12 +93,11 @@
 ## Архитектура
 
 src/
-├── commands/
-│   ├── handleHelpCommand.ts
-│   ├── handleStartCommand.ts
+├── commands/ - команды бота
+│   ├── commands.ts
 │   └── ... 
 │  
-├── data/
+├── data/ - данные для викторин
 │   ├── interface.data.ts
 │   ├── interface.quiz.ts
 │   ├── data.ts
@@ -106,38 +105,50 @@ src/
 │   ├── data....ts
 │   └── ... 
 │ 
-├── handlers/
-│   ├── handleMessage.ts
+├── game/ - игра
+│   ├── game.ts
 │   └── ... 
 │ 
-├── loggers/
+├── handlers/ - обработчики
+│   ├── helpCommandHandler.ts
+│   ├── startCommandHandler.ts
+│   ├── resetCommandHandler.ts
+│   ├── categorySelectionHandler.ts
+│   ├── messageHandler.ts
+│   ├── questionAnswerHandler.ts
+│   ├── quizCompletionHandler.ts
+│   ├── quizProgressHandler.ts
+│   └── ... 
+│ 
+├── loggers/ - логирование
+│   ├── loggers.ts
+│   ├── fileHelpers.ts
 │   ├── appendError.ts
 │   ├── appendLog.ts
 │   ├── appendQuizResult.ts
 │   ├── interface.quizRezult.ts
 │   └── ... 
-│ 
-├── quizzes/
-│   ├── handleQuizAnswer.ts
-│   ├── handleQuizReset.ts
-│   ├── handleQuizStart.ts
-│   ├── sendQuizQuestion.ts
+
+├── senders/ - отправщки 
+│   ├── questionSender.ts
+│   ├── imageSender.ts
+│   ├── factSender.ts
+│   ├── completionSender.ts
 │   └── ... 
 │ 
-├── state/
+├── states/ - состояния
+│   ├── botState.ts
 │   ├── interface.userState.ts
 │   ├── userStates.ts
 │   └── ... 
 │ 
-├── utils/
-│   ├── appendToFfile.ts
+├── utils/ - утилиты
+│   ├── changeListAnswersAndSelectFact.ts
 │   ├── delay.ts
-│   ├── fileHelpers.ts
 │   ├── gracefulShutdown.ts
 │   └── ...
 │
 ├── bot
-├── commands.ts
 ├── constants.ts
 └── ...
 
