@@ -27,7 +27,7 @@ export async function questionAnswerHandler(bot: Telegraf<Context>, ctx: Context
         userState.counterCorrectAnswers += 1;
     }
 
-    // Задержка в 2 секунды
+    // Задержка в 2 секунды после выбора ответа
     await delay(2000);
 
     await factSender(bot, userId)

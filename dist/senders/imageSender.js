@@ -14,6 +14,7 @@ const node_fs_1 = require("node:fs");
 const node_path_1 = require("node:path");
 const userStates_1 = require("../states/userStates");
 const appendError_1 = require("../loggers/appendError");
+const delay_1 = require("../utils/delay");
 function imageSender(bot, userId) {
     return __awaiter(this, void 0, void 0, function* () {
         const { chatId, currentListQuestions, currentIndexQuestion, currentCategory } = (0, userStates_1.getUserState)(userId);
@@ -22,6 +23,7 @@ function imageSender(bot, userId) {
             const photoPath = (0, node_path_1.join)(__dirname, '..', 'images', currentCategory, image);
             const photo = yield node_fs_1.promises.readFile(photoPath);
             yield bot.telegram.sendPhoto(chatId, { source: photo });
+            yield (0, delay_1.delay)(3000);
         }
         catch (error) {
             (0, appendError_1.appendError)(error);

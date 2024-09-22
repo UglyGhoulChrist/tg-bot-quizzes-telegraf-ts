@@ -15,7 +15,7 @@ export async function factSender(bot: Telegraf<Context>, userId: number) {
         if (!currentQuestion.facts?.length) return
         const fact: string = currentQuestion.facts[0]
         await bot.telegram.sendMessage(chatId, `<b>Интересный факт:</b>\n${fact}`, { parse_mode: 'HTML' })
-        // Задержка в 5 секунд
+        // Задержка в 5 секунд после отправки факта
         await delay(5000);
         return
     } catch (error) {

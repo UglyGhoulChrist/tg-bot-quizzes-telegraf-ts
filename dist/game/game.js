@@ -16,7 +16,6 @@ const botStates_1 = require("../states/botStates");
 const imageSender_1 = require("../senders/imageSender");
 const questionSender_1 = require("../senders/questionSender");
 const quizCompletionHandler_1 = require("../handlers/quizCompletionHandler");
-const delay_1 = require("../utils/delay");
 function game(bot, userId) {
     return __awaiter(this, void 0, void 0, function* () {
         if (!(0, botStates_1.getBotState)()) {
@@ -27,7 +26,6 @@ function game(bot, userId) {
             yield (0, quizCompletionHandler_1.quizCompletionHandler)(bot, userId);
         }
         yield (0, imageSender_1.imageSender)(bot, userId);
-        yield (0, delay_1.delay)(3000);
         yield (0, questionSender_1.questionSender)(bot, userId);
     });
 }

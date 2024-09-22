@@ -6,7 +6,6 @@ import { getBotState } from '../states/botStates';
 import { imageSender } from '../senders/imageSender';
 import { questionSender } from '../senders/questionSender';
 import { quizCompletionHandler } from '../handlers/quizCompletionHandler';
-import { delay } from '../utils/delay';
 
 export async function game(bot: Telegraf<Context>, userId: number): Promise<void> {
 
@@ -24,8 +23,6 @@ export async function game(bot: Telegraf<Context>, userId: number): Promise<void
 
     // Отправка сообщения с картинкой из вопроса
     await imageSender(bot, userId)
-    // Задержка в 3 секунды
-    await delay(3000)
 
     // Отправка сообщения с вопросом викторины и вариантами ответа
     await questionSender(bot, userId)
