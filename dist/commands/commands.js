@@ -5,4 +5,5 @@ exports.commands = [
     { command: 'help', description: 'Помощь' },
     { command: 'start', description: 'Старт' },
     { command: 'reset', description: 'Сброс' },
+    { command: 'statistics', description: 'Статистика' },
 ];

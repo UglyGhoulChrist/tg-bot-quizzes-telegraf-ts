@@ -13,6 +13,7 @@ import { questionAnswerHandler } from './handlers/questionAnswerHandler'
 import { setBotState } from './states/botStates'
 import { categorySelectionHandler } from './handlers/categorySelectionHandler'
 import { appendError } from './loggers/appendError'
+import { statisticsCommandHandler } from './handlers/statisticsCommandHandler'
 
 config()
 
@@ -32,6 +33,9 @@ bot.command('start', startCommandHandler)
 
 // Обработка команды `reset`
 bot.command('reset', resetCommandHandler)
+
+// Обработка команды `statistics`
+bot.command('statistics', statisticsCommandHandler)
 
 // Создаю регулярное выражение, которое соответствует любой викторине из массива викторин
 const quizesPattern: RegExp = new RegExp(listQuizes.join('|'), 'i');
