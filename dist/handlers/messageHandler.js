@@ -12,10 +12,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.messageHandler = void 0;
 const constants_1 = require("../constants");
 const appendError_1 = require("../loggers/appendError");
+const fetchAIResponse_1 = require("../ai/fetchAIResponse");
 function messageHandler(ctx) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            yield ctx.reply(constants_1.messageBadCommand);
+            if (ctx.text) {
+                yield ctx.reply("Нужно немного подождать...");
+                const response = yield (0, fetchAIResponse_1.fetchAIResponse)(ctx.text);
+                yield ctx.reply(response);
+            }
+            else {
+                yield ctx.reply(constants_1.messageBadCommand);
+            }
         }
         catch (error) {
             (0, appendError_1.appendError)(error);
