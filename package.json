@@ -1,7 +1,7 @@
 {
   "name": "tg-bot-quizzes-telegraf-ts",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "quizzes.js",
   "license": "MIT",
   "dependencies": {
     "dotenv": "^16.4.5",
@@ -14,7 +14,7 @@
     "typescript": "^5.4.4"
   },
   "scripts": {
-    "dev": "tsc-watch --onSuccess \"node ./dist/bot.js\"",
-    "start": "./dist/bot.js"
+    "dev": "tsc-watch --onSuccess \"node ./dist/quizzes.js\"",
+    "start": "./dist/quizzes.js"
   }
 }

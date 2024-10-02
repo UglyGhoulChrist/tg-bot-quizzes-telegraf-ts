@@ -83,7 +83,7 @@
 - │ ├── gracefulShutdown.ts
 - │ └── ...
 - │
-- ├── bot
+- ├── quizzes.ts
 - ├── constants.ts
 - └── ...
 
