@@ -139,3 +139,79 @@
 - Транспорт и средства передвижения
 - Погода и природные явления
 - Сказочные персонажи и мифические существа
+
+## Деплой проекта на cloud.ru:
+
+1. Создаю виртуальную машину
+
+### Настройка ВМ:
+
+2. Обновляю Ubuntu:
+
+- sudo apt update
+- sudo apt install git
+
+3. Устанавливаю nodejs, npm:
+
+- sudo apt install nodejs
+- sudo apt install npm
+- node -v
+- npm -v
+
+4. Обновляю версии:
+
+- sudo npm install -g n
+- sudo n stable
+- Справа вверху кнопка перезагрузить сервер
+- node -v
+- npm -v
+
+5. Устанавливаю менеджер процессов:
+
+- sudo npm i pm2 -g
+
+### Работа с проектом:
+
+6. Клонирую только ветку main:
+
+- git clone -b main
+  https://github.com/UglyGhoulChrist/tg-bot-quiz-animals-telegraf-ts.git
+
+7. Перехожу в папку с проектом:
+
+- ls
+- cd tg-bot...
+
+8. Перехожу в папку с проектом:
+
+- cd tg-bot-...
+
+9. Устанавливаю зависимости:
+
+- npm i
+
+10. Создаю файл .env:
+
+- touch .env
+- nano .env
+
+11. Запускаю бота:
+
+- pm2 start dist/bot.js
+
+12. Обновляю ветку main на вашей ВМ с Ubuntu:
+
+- cd путь/к/вашему/репозиторию
+- git checkout main
+- git fetch
+- git pull origin main
+
+13. Перезапусткаю проект телеграм бота:
+
+- pm2 list
+- pm2 stop bot-name-or-id
+- pm2 restart bot-name-or-id
+
+14. Удаляю из списка:
+
+- pm2 delete bot-name-or-id
