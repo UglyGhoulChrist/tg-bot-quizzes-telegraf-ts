@@ -5,6 +5,7 @@ const dataAnimals_1 = require("./dataAnimals");
 const dataSpaces_1 = require("./dataSpaces");
 const dataInsects_1 = require("./dataInsects");
 const dataNature_1 = require("./dataNature");
+const data_hemistry_1 = require("./data\u0421hemistry");
 exports.data = {
     nature: {
         description: "Викторина про природу",
@@ -21,5 +22,9 @@ exports.data = {
     spaces: {
         description: "Викторина про космос",
         listQuestions: dataSpaces_1.dataSpaces,
+    },
+    chemistry: {
+        description: "Викторина по химии (без картинок)",
+        listQuestions: data_hemistry_1.dataChemistry,
     },
 };

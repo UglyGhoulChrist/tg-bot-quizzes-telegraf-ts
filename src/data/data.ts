@@ -3,6 +3,7 @@ import { dataAnimals } from "./dataAnimals";
 import { dataSpaces } from "./dataSpaces";
 import { dataInsects } from "./dataInsects";
 import { dataNature } from "./dataNature";
+import { dataChemistry } from "./dataСhemistry";
 
 // Объект викторин, хранящий все викторины
 // Ключом является строка, представляющая категорию викторины,
@@ -23,5 +24,9 @@ export const data: IData = {
     spaces: {
         description: "Викторина про космос",
         listQuestions: dataSpaces,
+    },
+    chemistry: {
+        description: "Викторина по химии (без картинок)",
+        listQuestions: dataChemistry,
     },
 };
