@@ -1,20 +1,33 @@
 {
-  "name": "tg-bot-quizzes-telegraf-ts",
-  "version": "1.0.0",
-  "main": "quizzes.js",
-  "license": "MIT",
-  "dependencies": {
-    "dotenv": "^16.4.5",
-    "telegraf": "^4.16.3"
-  },
-  "devDependencies": {
-    "@telegraf/types": "^7.1.0",
-    "@types/node": "^20.12.6",
-    "tsc-watch": "^6.2.0",
-    "typescript": "^5.4.4"
-  },
-  "scripts": {
-    "dev": "tsc-watch --onSuccess \"node ./dist/quizzes.js\"",
-    "start": "./dist/quizzes.js"
-  }
+    "name": "tg-bot-quizzes-telegraf-ts",
+    "version": "1.0.0",
+    "main": "quizzes.js",
+    "license": "MIT",
+    "type": "module",
+    "dependencies": {
+        "dotenv": "^16.4.5",
+        "telegraf": "^4.16.3"
+    },
+    "devDependencies": {
+        "@rollup/plugin-typescript": "^12.1.0",
+        "@telegraf/types": "^7.1.0",
+        "@types/dotenv": "^8.2.0",
+        "@types/node": "^20.12.6",
+        "concurrently": "^9.0.1",
+        "nodemon": "^3.1.7",
+        "rollup": "^4.24.0",
+        "typescript": "^5.4.4"
+    },
+    "scripts": {
+        "build": "rollup -c",
+        "watch": "rollup -c -w",
+        "start": "nodemon dist/quizzes.js",
+        "dev": "concurrently \"npm run watch\" \"npm run start\""
+    },
+    "nodemonConfig": {
+        "watch": [
+            "dist"
+        ],
+        "ext": "js,json"
+    }
 }
