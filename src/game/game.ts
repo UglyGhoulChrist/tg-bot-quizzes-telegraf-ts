@@ -1,29 +1,31 @@
-import { Telegraf, Context } from 'telegraf';
-import { getUserState } from '../states/userStates';
-import { appendLog } from '../loggers/appendLog';
-import { IUserState } from '../states/interface.userState';
-import { getBotState } from '../states/botStates';
-import { imageSender } from '../senders/imageSender';
-import { questionSender } from '../senders/questionSender';
-import { quizCompletionHandler } from '../handlers/quizCompletionHandler';
+import { Context, Telegraf } from "telegraf";
+import { getUserState } from "../states/userStates";
+import { appendLog } from "../loggers/appendLog";
+import { IUserState } from "../states/interface.userState";
+import { getBotState } from "../states/botStates";
+import { imageSender } from "../senders/imageSender";
+import { questionSender } from "../senders/questionSender";
+import { quizCompletionHandler } from "../handlers/quizCompletionHandler";
 
-export async function game(bot: Telegraf<Context>, userId: number): Promise<void> {
-
+export async function game(
+    bot: Telegraf<Context>,
+    userId: number,
+): Promise<void> {
     // Проверяем, запущен ли бот перед отправкой викторины
     if (!getBotState()) {
-        return appendLog('Бот не запущен, отправка викторины невозможна.')
+        return appendLog("Бот не запущен, отправка викторины невозможна.");
     }
 
-    const userState: IUserState = getUserState(userId)
+    const userState: IUserState = getUserState(userId);
 
     if (userState.currentIndexQuestion >= userState.lengthListQuestions) {
         // Обработчик окончания викторины
-        await quizCompletionHandler(bot, userId)
+        await quizCompletionHandler(bot, userId);
     }
 
     // Отправка сообщения с картинкой из вопроса
-    await imageSender(bot, userId)
+    await imageSender(bot, userId);
 
     // Отправка сообщения с вопросом викторины и вариантами ответа
-    await questionSender(bot, userId)
+    await questionSender(bot, userId);
 }
