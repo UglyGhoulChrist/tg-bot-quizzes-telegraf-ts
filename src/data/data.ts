@@ -9,24 +9,24 @@ import { dataChemistry } from "./dataСhemistry";
 // Ключом является строка, представляющая категорию викторины,
 // значением - описание викторины и список вопросов
 export const data: IData = {
-    nature: {
-        description: "Викторина про природу",
-        listQuestions: dataNature,
-    },
-    animals: {
-        description: "Викторина про животных",
-        listQuestions: dataAnimals,
-    },
-    insects: {
-        description: "Викторина про маленьких обитателей природы",
-        listQuestions: dataInsects,
-    },
-    spaces: {
-        description: "Викторина про космос",
-        listQuestions: dataSpaces,
-    },
-    chemistry: {
-        description: "Викторина по химии (без картинок)",
-        listQuestions: dataChemistry,
-    },
+  nature: {
+    description: "Викторина про природу",
+    listQuestions: dataNature,
+  },
+  animals: {
+    description: "Викторина про животных",
+    listQuestions: dataAnimals,
+  },
+  insects: {
+    description: "Викторина про маленьких обитателей природы",
+    listQuestions: dataInsects,
+  },
+  spaces: {
+    description: "Викторина про космос",
+    listQuestions: dataSpaces,
+  },
+  chemistry: {
+    description: "Викторина по химии (без картинок)",
+    listQuestions: dataChemistry,
+  },
 };
