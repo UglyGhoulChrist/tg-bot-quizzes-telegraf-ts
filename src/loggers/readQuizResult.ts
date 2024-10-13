@@ -1,12 +1,17 @@
-// Импортирую модуль path для работы с путями файловой системы
 import path from "node:path";
-// Импортирую модуль файловой системы с промисами для асинхронной работы с файлами
 import { readFile } from "node:fs/promises";
+import { appendError } from "./appendError";
+
 // Путь к файлу результатов викторин
 const QUIZ_RESULTS_FILE_PATH: string = path.join("logFiles", "quizResults.log");
 
-// Функция для добавления результатов викторины в файл результатов
+// Функция для чтения результатов викторины из файла
 export async function readQuizResult(): Promise<string> {
-    const results: string = await readFile(QUIZ_RESULTS_FILE_PATH, "utf-8");
-    return results;
+    try {
+        const results: string = await readFile(QUIZ_RESULTS_FILE_PATH, "utf-8");
+        return results;
+    } catch (error) {
+        appendError(error as NodeJS.ErrnoException);
+        return "";
+    }
 }

@@ -1833,7 +1833,7 @@ async function loggers(filePath, content) {
     }
 }
 
-const LOG_FILE_PATH$1 = path.join('logFiles', 'botLogs.log');
+const LOG_FILE_PATH$1 = path.join("logFiles", "botLogs.log");
 async function appendLog(logMessage) {
     const timestamp = new Date().toISOString();
     const logEntry = `INFO - ${timestamp}: ${logMessage}\n`;
@@ -1874,7 +1874,7 @@ const messageReset = 'Мы забыли все предыдущие ответы
 const messageNotFinish = 'О, кажется, ты уже начал викторину! Чтобы продолжить, выбери ответ на текущий вопрос. Если хочешь начать всё сначала, используй команду /reset. Приключения ждут! 🐾';
 const messageBadCommand = 'Ой, я не знаю такой команды. 🤔 Используй /help, чтобы увидеть список команд, которые я понимаю, или продолжай отвечать на вопросы!';
 
-const LOG_FILE_PATH = path.join('logFiles', 'botLogs.log');
+const LOG_FILE_PATH = path.join("logFiles", "botLogs.log");
 async function appendError(error) {
     const timestamp = new Date().toISOString();
     const errEntry = `ERROR - ${timestamp}: ${error.message}\n`;
@@ -1991,7 +1991,7 @@ async function completionSender(bot, userId) {
     }
 }
 
-const QUIZ_RESULTS_FILE_PATH$1 = path.join('logFiles', 'quizResults.log');
+const QUIZ_RESULTS_FILE_PATH$1 = path.join("logFiles", "quizResults.log");
 async function appendQuizResult(quizResult) {
     const timestamp = new Date().toISOString();
     const resultEntry = `${timestamp}: ${JSON.stringify(quizResult)}\n`;

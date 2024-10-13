@@ -1,6 +1,6 @@
 // Импортирую модуль файловой системы с промисами для асинхронной работы с файлами
-import { appendFile } from "node:fs/promises";
-import { fileHelpers } from "./fileHelpers";
+import { access, appendFile, mkdir, writeFile } from "node:fs/promises";
+import path from "node:path";
 
 // Функция для добавления записи в файл
 export async function loggers(
@@ -8,9 +8,14 @@ export async function loggers(
     content: string,
 ): Promise<void> {
     // Проверяю и создаю файл, если нужно
-    await fileHelpers(filePath);
     try {
-        // Добавляю запись в файл
+        await access(filePath);
+    } catch {
+        await mkdir(path.dirname(filePath), { recursive: true });
+        await writeFile(filePath, "", { encoding: "utf-8" });
+    }
+    // Добавляю запись в файл
+    try {
         await appendFile(filePath, content, { encoding: "utf-8" });
     } catch (error) {
         // В случае ошибки вывожу сообщение в консоль
