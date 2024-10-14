@@ -1,4 +1,4 @@
-import typescript from "@rollup/plugin-typescript"
+import typescript from "@rollup/plugin-typescript";
 
 export default {
     input: "src/quizzes.ts", // точка входа
@@ -15,4 +15,4 @@ export default {
         include: ["src/**"],
         exclude: ["dist/**", "*.log", "*.json"],
     },
-}
+};

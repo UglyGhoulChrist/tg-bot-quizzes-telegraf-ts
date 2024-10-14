@@ -23,7 +23,7 @@ export function changeListAnswersAndSelectFact(quizzes: IQuiz[]): IQuiz[] {
 
         // Формирую новый массив опций и перемешиваю его
         const newOptions: string[] = [correctAnswer, ...randomOptions].sort(
-            () => Math.random() - 0.5
+            () => Math.random() - 0.5,
         );
 
         // Нахожу индекс правильного ответа в новом массиве
