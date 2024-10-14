@@ -2648,7 +2648,7 @@ async function fetchAIResponseGptAsync(userText) {
 async function askQuestionGptAsync(message) {
     try {
         const response = await fetchAIResponseGptAsync(message);
-        return `Yandex GPT: ${response}`;
+        return response;
     }
     catch (error) {
         appendError(error);
@@ -2656,15 +2656,27 @@ async function askQuestionGptAsync(message) {
     }
 }
 
+async function appendConversations(id, name = "undefined", logMessage) {
+    const timestamp = new Date().toISOString();
+    const logEntry = `${timestamp} - ${name} : ${logMessage}\n`;
+    const LOG_FILE_PATH = path.join("logFiles", `${id}.log`);
+    await loggers(LOG_FILE_PATH, logEntry);
+}
+
 dotenv.config();
 async function messageHandler(ctx) {
     try {
         const id = ctx.message?.from?.id;
-        if (id === Number(process.env.DEVELOPER_ID) && ctx.message &&
+        const name = ctx.message?.from?.first_name;
+        if (ctx.message &&
             "text" in ctx.message) {
+            if (id)
+                appendConversations(id, name, ctx.message.text);
             await ctx.reply("Ответ скоро будет...");
             const responseAi = await askQuestionGptAsync(ctx.message.text);
-            await ctx.reply(responseAi);
+            if (id)
+                appendConversations(id, "Yandex GPT", responseAi);
+            await ctx.reply(`Yandex GPT: ${responseAi}`);
             return;
         }
         await ctx.reply(messageBadCommand);
