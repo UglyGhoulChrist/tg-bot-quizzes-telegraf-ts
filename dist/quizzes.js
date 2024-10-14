@@ -1,4 +1,4 @@
-import { config } from 'dotenv';
+import dotenv, { config } from 'dotenv';
 import { Telegraf } from 'telegraf';
 import path, { join } from 'node:path';
 import { access, mkdir, writeFile, appendFile, readFile } from 'node:fs/promises';
@@ -2589,8 +2589,84 @@ async function safeReply(ctx, message) {
     }
 }
 
+dotenv.config();
+const URL_GPT_ASYNC = "https://llm.api.cloud.yandex.net/foundationModels/v1/completionAsync";
+const MODEL_URI_GPT_ASYNC = `gpt://${process.env.FOLDER_ID}/yandexgpt`;
+const AUTHORIZATION = `Api-Key ${process.env.API_KEY}`;
+const HEADERS = {
+    "Accept": "application/json",
+    "Authorization": AUTHORIZATION,
+    "Content-Type": "application/json",
+};
+
+async function sendGetRequest(url) {
+    const response = await fetch(url, {
+        method: "GET",
+        headers: HEADERS,
+    });
+    return response.json();
+}
+
+async function sendPostRequest(url, data) {
+    const response = await fetch(url, {
+        method: "POST",
+        headers: HEADERS,
+        body: JSON.stringify(data),
+    });
+    return response.json();
+}
+
+async function fetchAIResponseGptAsync(userText) {
+    const data = {
+        modelUri: MODEL_URI_GPT_ASYNC,
+        completionOptions: { temperature: 0.3, maxTokens: 1000 },
+        messages: [
+            { role: "system", text: "Ты детский помошник." },
+            { role: "user", text: userText },
+        ],
+    };
+    try {
+        const operation = await sendPostRequest(URL_GPT_ASYNC, data);
+        const operationId = operation.id;
+        return new Promise((resolve, reject) => {
+            const interval = setInterval(async () => {
+                const getUrl = `https://operation.api.cloud.yandex.net/operations/${operationId}`;
+                const result = await sendGetRequest(getUrl);
+                if (result.done && result.response) {
+                    clearInterval(interval);
+                    resolve(result.response.alternatives[0].message.text);
+                }
+            }, 1000);
+        });
+    }
+    catch (error) {
+        appendError(error);
+        return "Ошибка при получении ответа от GPT.";
+    }
+}
+
+async function askQuestionGptAsync(message) {
+    try {
+        const response = await fetchAIResponseGptAsync(message);
+        return `Yandex GPT: ${response}`;
+    }
+    catch (error) {
+        appendError(error);
+        return "Ошибка при получении ответа от GPT.";
+    }
+}
+
+dotenv.config();
 async function messageHandler(ctx) {
     try {
+        const id = ctx.message?.from?.id;
+        if (id === Number(process.env.DEVELOPER_ID) && ctx.message &&
+            "text" in ctx.message) {
+            await ctx.reply("Ответ скоро будет...");
+            const responseAi = await askQuestionGptAsync(ctx.message.text);
+            await ctx.reply(responseAi);
+            return;
+        }
         await ctx.reply(messageBadCommand);
     }
     catch (error) {
