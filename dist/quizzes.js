@@ -1,7 +1,8 @@
 import dotenv, { config } from 'dotenv';
 import { Telegraf } from 'telegraf';
-import path, { join } from 'node:path';
+import path, { dirname, join } from 'node:path';
 import { access, mkdir, writeFile, appendFile, readFile } from 'node:fs/promises';
+import { fileURLToPath } from 'url';
 
 const commands = [
     { command: "help", description: "Помощь" },
@@ -2693,8 +2694,9 @@ function delay(ms) {
 async function imageSender(bot, userId) {
     const { chatId, currentListQuestions, currentIndexQuestion, currentCategory, } = getUserState(userId);
     const { image } = currentListQuestions[currentIndexQuestion];
+    const __dirname = dirname(fileURLToPath(import.meta.url));
     try {
-        const photoPath = join(__dirname, "..", "images", currentCategory, image);
+        const photoPath = join(__dirname, "images", currentCategory, image);
         const photo = await readFile(photoPath);
         await bot.telegram.sendPhoto(chatId, { source: photo });
         await delay(3000);
