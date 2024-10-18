@@ -2617,7 +2617,7 @@ async function sendPostRequest(url, data) {
     return response.json();
 }
 
-async function fetchAIResponseGptAsync(userText) {
+async function fetchAIResponseGptAsync(id, userText) {
     const data = {
         modelUri: MODEL_URI_GPT_ASYNC,
         completionOptions: { temperature: 0.3, maxTokens: 1000 },
@@ -2646,17 +2646,6 @@ async function fetchAIResponseGptAsync(userText) {
     }
 }
 
-async function askQuestionGptAsync(message) {
-    try {
-        const response = await fetchAIResponseGptAsync(message);
-        return response;
-    }
-    catch (error) {
-        appendError(error);
-        return "Ошибка при получении ответа от GPT.";
-    }
-}
-
 async function appendConversations(id, name = "undefined", logMessage) {
     const timestamp = new Date().toISOString();
     const logEntry = `${timestamp} - ${name} : ${logMessage}\n`;
@@ -2664,19 +2653,15 @@ async function appendConversations(id, name = "undefined", logMessage) {
     await loggers(LOG_FILE_PATH, logEntry);
 }
 
-dotenv.config();
 async function messageHandler(ctx) {
     try {
         const id = ctx.message?.from?.id;
         const name = ctx.message?.from?.first_name;
-        if (ctx.message &&
-            "text" in ctx.message) {
-            if (id)
-                appendConversations(id, name, ctx.message.text);
+        if (ctx.message && "text" in ctx.message && id) {
+            appendConversations(id, name, ctx.message.text);
             await ctx.reply("Ответ скоро будет...");
-            const responseAi = await askQuestionGptAsync(ctx.message.text);
-            if (id)
-                appendConversations(id, "Yandex GPT", responseAi);
+            const responseAi = await fetchAIResponseGptAsync(id, ctx.message.text);
+            appendConversations(id, "Yandex GPT", responseAi);
             await ctx.reply(`Yandex GPT: ${responseAi}`);
             return;
         }

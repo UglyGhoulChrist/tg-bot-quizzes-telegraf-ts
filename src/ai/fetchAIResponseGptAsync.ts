@@ -7,6 +7,7 @@ import { sendGetRequest } from "./sendGetRequest";
 import { sendPostRequest } from "./sendPostRequest";
 
 export async function fetchAIResponseGptAsync(
+    id: number,
     userText: string,
 ): Promise<string> {
     // Собираем запрос
