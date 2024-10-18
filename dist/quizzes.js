@@ -2600,6 +2600,20 @@ const HEADERS = {
     "Content-Type": "application/json",
 };
 
+dotenv.config();
+function getSystemText(id) {
+    switch (id) {
+        case Number(process.env.DEVELOPER_ID):
+            return "Ты - разработчик программного обеспечения";
+        case Number(process.env.IVAN_ID):
+            return "Ты — дружелюбный помощник, который объясняет вещи простыми словами. Используй примеры из жизни, чтобы помочь ребенку понять сложные темы. Давай поддерживать веселый и игривый тон.";
+        case Number(process.env.ADULT_ID):
+            return "Ты — эксперт в своей области, который предоставляет подробные и точные ответы. Используй профессиональный язык и предоставляй примеры из реальной жизни, чтобы подкрепить свои объяснения. Будь формален и уважителен.";
+        default:
+            return "Ты — дружелюбный помощник";
+    }
+}
+
 async function sendGetRequest(url) {
     const response = await fetch(url, {
         method: "GET",
@@ -2618,11 +2632,12 @@ async function sendPostRequest(url, data) {
 }
 
 async function fetchAIResponseGptAsync(id, userText) {
+    const systemText = getSystemText(id);
     const data = {
         modelUri: MODEL_URI_GPT_ASYNC,
         completionOptions: { temperature: 0.3, maxTokens: 1000 },
         messages: [
-            { role: "system", text: "Ты детский помошник." },
+            { role: "system", text: systemText },
             { role: "user", text: userText },
         ],
     };
@@ -2638,6 +2653,15 @@ async function fetchAIResponseGptAsync(id, userText) {
                     resolve(result.response.alternatives[0].message.text);
                 }
             }, 1000);
+            const timeout = setTimeout(() => {
+                clearInterval(interval);
+                reject(new Error("Время ожидания ответа истекло."));
+            }, 60000);
+            const originalResolve = resolve;
+            resolve = (value) => {
+                clearTimeout(timeout);
+                originalResolve(value);
+            };
         });
     }
     catch (error) {
