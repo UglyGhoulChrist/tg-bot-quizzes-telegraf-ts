@@ -2,9 +2,11 @@
 
 ## Описание
 
-Бот задает вопросы. Для каждого вопроса доступно несколько вариантов ответа,
-один из которых является верным. После выбора ответа бот предоставит объяснение
-к вопросу и сообщит, правильно ли был выбран ответ.
+1. Бот задает вопросы. Для каждого вопроса доступно несколько вариантов ответа,
+   один из которых является верным. После выбора ответа бот предоставит
+   объяснение к вопросу и сообщит, правильно ли был выбран ответ.
+
+2. Бот поддерживает общение с пользователем через Yandex GPT.
 
 ## Создание проекта
 
@@ -25,10 +27,23 @@
 
 - main - главная ветка (ветка деплоя)
 - develop - ветка разработки
+- feature/... - ветки фич
 
 ## Архитектура
 
 - src/
+- │
+- ├── ai/ - ИИ Yandex GPT
+- │ ├── constants.ts - константы для Yandex API
+- │ ├── dataGpt.interface.ts
+- │ ├── fetchAIResponseGptAsync.ts - асинхронный запрос к Yandex GPT
+- │ ├── getSystemText.ts - стиль ответа GPT
+- │ ├── operation.interface.ts
+- │ ├── responseGptAsync.interface.ts
+- │ ├── sendGetRequest.ts
+- │ ├── sendPostRequest.ts
+- │ └── ...
+- │
 - ├── commands/ - команды бота
 - │ ├── commands.ts
 - │ └── ...
@@ -64,6 +79,7 @@
 - │ ├── appendQuizResult.ts
 - │ ├── interface.quizRezult.ts
 - │ └── ...
+- │
 - ├── senders/ - отправщки
 - │ ├── questionSender.ts
 - │ ├── imageSender.ts
@@ -139,79 +155,3 @@
 - Транспорт и средства передвижения
 - Погода и природные явления
 - Сказочные персонажи и мифические существа
-
-## Деплой проекта на cloud.ru:
-
-1. Создаю виртуальную машину
-
-### Настройка ВМ:
-
-2. Обновляю Ubuntu:
-
-- sudo apt update
-- sudo apt install git
-
-3. Устанавливаю nodejs, npm:
-
-- sudo apt install nodejs
-- sudo apt install npm
-- node -v
-- npm -v
-
-4. Обновляю версии:
-
-- sudo npm install -g n
-- sudo n stable
-- Справа вверху кнопка перезагрузить сервер
-- node -v
-- npm -v
-
-5. Устанавливаю менеджер процессов:
-
-- sudo npm i pm2 -g
-
-### Работа с проектом:
-
-6. Клонирую только ветку main:
-
-- git clone -b main
-  https://github.com/UglyGhoulChrist/tg-bot-quiz-animals-telegraf-ts.git
-
-7. Перехожу в папку с проектом:
-
-- ls
-- cd tg-bot...
-
-8. Перехожу в папку с проектом:
-
-- cd tg-bot-...
-
-9. Устанавливаю зависимости:
-
-- npm i
-
-10. Создаю файл .env:
-
-- touch .env
-- nano .env
-
-11. Запускаю бота:
-
-- pm2 start dist/bot.js
-
-12. Обновляю ветку main на вашей ВМ с Ubuntu:
-
-- cd путь/к/вашему/репозиторию
-- git checkout main
-- git fetch
-- git pull origin main
-
-13. Перезапусткаю проект телеграм бота:
-
-- pm2 list
-- pm2 stop bot-name-or-id
-- pm2 restart bot-name-or-id
-
-14. Удаляю из списка:
-
-- pm2 delete bot-name-or-id
