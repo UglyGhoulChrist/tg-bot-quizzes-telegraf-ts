@@ -14,11 +14,14 @@
         "@types/dotenv": "^8.2.0",
         "@types/node": "^20.12.6",
         "concurrently": "^9.0.1",
+        "fs-extra": "^11.2.0",
         "nodemon": "^3.1.7",
         "rollup": "^4.24.0",
+        "sharp": "^0.33.5",
         "typescript": "^5.4.4"
     },
     "scripts": {
+        "convert": "node src/convertImagesToWebp/convertImages.js",
         "build": "rollup -c",
         "watch": "rollup -c -w",
         "start": "nodemon dist/quizzes.js",

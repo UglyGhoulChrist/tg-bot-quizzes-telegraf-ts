@@ -19,6 +19,8 @@
 - yarn add -D @telegraf/types
 - yarn add -D tsc-watch
 - yarn add -D typescript
+- yarn add -D sharp
+- yarn add -D fs-extra
 - git init
 
 ## Ветки
@@ -81,6 +83,14 @@
 - │ ├── changeListAnswersAndSelectFact.ts
 - │ ├── delay.ts
 - │ ├── gracefulShutdown.ts
+- │ └── ...
+- │
+- ├── convertImagesToWebp/ - конвертер изображений в Webp 900*900
+- │ └── convertImages.js
+- │
+- ├── originalImages/ - оригинальные изображения
+- │ ├── animals/
+- │ ├── insects/
 - │ └── ...
 - │
 - ├── quizzes.ts
