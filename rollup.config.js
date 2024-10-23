@@ -1,4 +1,4 @@
-import typescript from "@rollup/plugin-typescript";
+import typescript from "@rollup/plugin-typescript"
 
 export default {
     input: "src/quizzes.ts", // точка входа
@@ -10,9 +10,9 @@ export default {
     plugins: [
         typescript(), // плагин для работы с TypeScript
     ],
-    external: ["dotenv", "telegraf", "node:fs/promises", "node:path"],
+    external: ["dotenv", "telegraf", "node:fs/promises", "node:path", "url"],
     watch: {
         include: ["src/**"],
         exclude: ["dist/**", "*.log", "*.json"],
     },
-};
+}

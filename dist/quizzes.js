@@ -1,4 +1,4 @@
-import dotenv, { config } from 'dotenv';
+import { config } from 'dotenv';
 import { Telegraf } from 'telegraf';
 import path, { dirname, join } from 'node:path';
 import { access, mkdir, writeFile, appendFile, readFile } from 'node:fs/promises';
@@ -2590,86 +2590,6 @@ async function safeReply(ctx, message) {
     }
 }
 
-dotenv.config();
-const URL_GPT_ASYNC = "https://llm.api.cloud.yandex.net/foundationModels/v1/completionAsync";
-const MODEL_URI_GPT_ASYNC = `gpt://${process.env.FOLDER_ID}/yandexgpt`;
-const AUTHORIZATION = `Api-Key ${process.env.API_KEY}`;
-const HEADERS = {
-    "Accept": "application/json",
-    "Authorization": AUTHORIZATION,
-    "Content-Type": "application/json",
-};
-
-dotenv.config();
-function getSystemText(id) {
-    switch (id) {
-        case Number(process.env.DEVELOPER_ID):
-            return "Ты - разработчик программного обеспечения";
-        case Number(process.env.IVAN_ID):
-            return "Ты — дружелюбный помощник, который объясняет вещи простыми словами. Используй примеры из жизни, чтобы помочь ребенку понять сложные темы. Давай поддерживать веселый и игривый тон.";
-        case Number(process.env.ADULT_ID):
-            return "Ты — эксперт в своей области, который предоставляет подробные и точные ответы. Используй профессиональный язык и предоставляй примеры из реальной жизни, чтобы подкрепить свои объяснения. Будь формален и уважителен.";
-        default:
-            return "Ты — дружелюбный помощник";
-    }
-}
-
-async function sendGetRequest(url) {
-    const response = await fetch(url, {
-        method: "GET",
-        headers: HEADERS,
-    });
-    return response.json();
-}
-
-async function sendPostRequest(url, data) {
-    const response = await fetch(url, {
-        method: "POST",
-        headers: HEADERS,
-        body: JSON.stringify(data),
-    });
-    return response.json();
-}
-
-async function fetchAIResponseGptAsync(id, userText) {
-    const systemText = getSystemText(id);
-    const data = {
-        modelUri: MODEL_URI_GPT_ASYNC,
-        completionOptions: { temperature: 0.3, maxTokens: 1000 },
-        messages: [
-            { role: "system", text: systemText },
-            { role: "user", text: userText },
-        ],
-    };
-    try {
-        const operation = await sendPostRequest(URL_GPT_ASYNC, data);
-        const operationId = operation.id;
-        return new Promise((resolve, reject) => {
-            const interval = setInterval(async () => {
-                const getUrl = `https://operation.api.cloud.yandex.net/operations/${operationId}`;
-                const result = await sendGetRequest(getUrl);
-                if (result.done && result.response) {
-                    clearInterval(interval);
-                    resolve(result.response.alternatives[0].message.text);
-                }
-            }, 1000);
-            const timeout = setTimeout(() => {
-                clearInterval(interval);
-                reject(new Error("Время ожидания ответа истекло."));
-            }, 60000);
-            const originalResolve = resolve;
-            resolve = (value) => {
-                clearTimeout(timeout);
-                originalResolve(value);
-            };
-        });
-    }
-    catch (error) {
-        appendError(error);
-        return "Ошибка при получении ответа от GPT.";
-    }
-}
-
 async function appendConversations(id, name = "undefined", logMessage) {
     const timestamp = new Date().toISOString();
     const logEntry = `${timestamp} - ${name} : ${logMessage}\n`;
@@ -2683,10 +2603,20 @@ async function messageHandler(ctx) {
         const name = ctx.message?.from?.first_name;
         if (ctx.message && "text" in ctx.message && id) {
             appendConversations(id, name, ctx.message.text);
-            await ctx.reply("Ответ скоро будет...");
-            const responseAi = await fetchAIResponseGptAsync(id, ctx.message.text);
-            appendConversations(id, "Yandex GPT", responseAi);
-            await ctx.reply(`Yandex GPT: ${responseAi}`);
+            const sentMessage = await ctx.reply("Ответ скоро будет...");
+            const messageId = sentMessage.message_id;
+            const responseAiSber = await fetch("https://container-yandex-ai-docker-express-ts.containers.cloud.ru/api/gpt/async", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ id, message: ctx.message.text }),
+            });
+            const responseAiSberJson = await responseAiSber.json();
+            const responseAi = responseAiSberJson.message;
+            appendConversations(id, "Yandex GPT + Container App Sber", responseAi);
+            await ctx.deleteMessage(messageId);
+            await ctx.replyWithHTML(`<b>Yandex GPT + Container App Sber</b>:\n\n${responseAi}`);
             return;
         }
         await ctx.reply(messageBadCommand);
