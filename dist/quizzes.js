@@ -2590,35 +2590,8 @@ async function safeReply(ctx, message) {
     }
 }
 
-async function appendConversations(id, name = "undefined", logMessage) {
-    const timestamp = new Date().toISOString();
-    const logEntry = `${timestamp} - ${name} : ${logMessage}\n`;
-    const LOG_FILE_PATH = path.join("logFiles", `${id}.log`);
-    await loggers(LOG_FILE_PATH, logEntry);
-}
-
 async function messageHandler(ctx) {
     try {
-        const id = ctx.message?.from?.id;
-        const name = ctx.message?.from?.first_name;
-        if (ctx.message && "text" in ctx.message && id) {
-            appendConversations(id, name, ctx.message.text);
-            const sentMessage = await ctx.reply("Ответ скоро будет...");
-            const messageId = sentMessage.message_id;
-            const responseAiSber = await fetch("https://container-yandex-ai-docker-express-ts.containers.cloud.ru/api/gpt/async", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ id, message: ctx.message.text }),
-            });
-            const responseAiSberJson = await responseAiSber.json();
-            const responseAi = responseAiSberJson.message;
-            appendConversations(id, "Yandex GPT + Container App Sber", responseAi);
-            await ctx.deleteMessage(messageId);
-            await ctx.replyWithHTML(`<b>Yandex GPT + Container App Sber</b>:\n\n${responseAi}`);
-            return;
-        }
         await ctx.reply(messageBadCommand);
     }
     catch (error) {
