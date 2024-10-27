@@ -2492,11 +2492,18 @@ async function appendLog(logMessage) {
 }
 
 let botStates;
+let lastCommand;
 function getBotState() {
     return botStates;
 }
 function setBotState(isActive) {
     botStates = isActive;
+}
+function setLastCommand(command) {
+    lastCommand = command;
+}
+function getLastCommand() {
+    return lastCommand;
 }
 
 async function gracefulShutdown(bot, signal) {
@@ -2532,8 +2539,28 @@ async function appendError(error) {
     await loggers(LOG_FILE_PATH, errEntry);
 }
 
+async function deleteMessageAfterDelay(ctx, messageId, delay) {
+    return new Promise((resolve) => {
+        setTimeout(async () => {
+            try {
+                await ctx.deleteMessage(messageId);
+            }
+            catch (error) {
+                appendError(error);
+            }
+            resolve();
+        }, delay);
+    });
+}
+
 async function helpCommandHandler(ctx) {
+    const idLastCommand = ctx.message?.message_id;
     try {
+        if (getLastCommand() === "/help" && idLastCommand) {
+            await deleteMessageAfterDelay(ctx, idLastCommand, 2000);
+            return;
+        }
+        setLastCommand("/help");
         await ctx.replyWithHTML(messageHelp, { parse_mode: "HTML" });
     }
     catch (error) {
@@ -2554,36 +2581,44 @@ function resetUserState(userId) {
 
 async function resetCommandHandler(ctx) {
     const userId = ctx.from?.id;
-    if (userId) {
-        resetUserState(userId);
-        try {
+    const idLastCommand = ctx.message?.message_id;
+    try {
+        if (getLastCommand() === "/reset" && idLastCommand) {
+            await deleteMessageAfterDelay(ctx, idLastCommand, 2000);
+            return;
+        }
+        setLastCommand("/reset");
+        if (userId) {
+            resetUserState(userId);
             await ctx.reply(messageReset);
+            return;
         }
-        catch (error) {
-            appendError(error);
-        }
-    }
-    else {
         appendLog("Объект from в контексте не найден.");
+    }
+    catch (error) {
+        appendError(error);
     }
 }
 
 async function startCommandHandler(ctx) {
     const userId = ctx.from?.id;
-    if (!userId) {
-        await appendLog("Объект from в контексте не найден.");
-        return;
-    }
-    if (getUserState(userId)) {
-        await safeReply(ctx, messageNotFinish);
-    }
-    else {
-        await safeReply(ctx, messageStart);
-    }
-}
-async function safeReply(ctx, message) {
+    const idLastCommand = ctx.message?.message_id;
     try {
-        await ctx.reply(message);
+        if (getLastCommand() === "/start" && idLastCommand) {
+            await deleteMessageAfterDelay(ctx, idLastCommand, 2000);
+            return;
+        }
+        setLastCommand("/start");
+        if (!userId) {
+            await appendLog("Объект from в контексте не найден.");
+            return;
+        }
+        if (getUserState(userId)) {
+            await ctx.reply(messageNotFinish);
+        }
+        else {
+            await ctx.reply(messageStart);
+        }
     }
     catch (error) {
         appendError(error);
@@ -2591,8 +2626,16 @@ async function safeReply(ctx, message) {
 }
 
 async function messageHandler(ctx) {
+    const idLastMessage = ctx.message?.message_id;
+    if (!idLastMessage)
+        return;
     try {
-        await ctx.reply(messageBadCommand);
+        await deleteMessageAfterDelay(ctx, idLastMessage, 2000);
+        const mostRecentMessage = await ctx.replyWithHTML(messageBadCommand, {
+            parse_mode: "HTML",
+        });
+        const idMostRecentMessage = mostRecentMessage.message_id;
+        await deleteMessageAfterDelay(ctx, idMostRecentMessage, 5000);
     }
     catch (error) {
         appendError(error);
@@ -2826,6 +2869,12 @@ config();
 const developerId = parseInt(process.env.DEVELOPER_ID);
 async function statisticsCommandHandler(ctx) {
     const userId = ctx.from?.id;
+    const idLastCommand = ctx.message?.message_id;
+    if (getLastCommand() === "/statistics" && idLastCommand) {
+        await deleteMessageAfterDelay(ctx, idLastCommand, 2000);
+        return;
+    }
+    setLastCommand("/statistics");
     if (!userId) {
         appendLog("Объект from в контексте не найден.");
         return;
